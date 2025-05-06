@@ -1,4 +1,6 @@
 const express = require('express');
+const {faker} = require('@faker-js/faker');
+const routerApi = require('./routes/indexRouter');
 
 const app = express();
 const PORT = 3000;
@@ -12,13 +14,8 @@ app.get('/new_ruta', (req, res)=>{
 }
 );
 
-app.get('/products', (req, res)=>{
-  res.json({
-    name: 'Product 1',
-    price: 100,
-    description: 'This is a product'
-  });
-});
+routerApi(app);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
