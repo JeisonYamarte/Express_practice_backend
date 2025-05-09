@@ -1,14 +1,14 @@
 const {faker} = require('@faker-js/faker');
 
 
-class ProductsService{
+class categoriesService{
 
   constructor(){
     this.products = [];
     this.generate();
   }
 
-  generate(){
+  async generate(){
     for (let i = 0; i < 100; i++) {
       this.products.push({
         id: faker.string.uuid(),
@@ -22,7 +22,7 @@ class ProductsService{
   }
 
 
-  create(data){
+  async create(data){
     const newProduct = {
       id: faker.string.uuid(),
       ...data,
@@ -32,15 +32,15 @@ class ProductsService{
 
   }
 
-  find(){
+  async find(){
     return this.products;
   }
 
-  findOne(id){
+  async findOne(id){
     return this.products.find(item => item.id === id);
   }
 
-  update(id, changes){
+  async update(id, changes){
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
       throw new Error('Product not found');
@@ -56,7 +56,7 @@ class ProductsService{
 
   }
 
-  delete(id){
+  async delete(id){
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
       throw new Error('Product not found');
@@ -68,4 +68,4 @@ class ProductsService{
   }
 }
 
-module.exports = ProductsService;
+module.exports = categoriesService;

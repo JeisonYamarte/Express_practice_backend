@@ -3,7 +3,7 @@ const productsRouter = require('./productsRouter');
 const usersRouter = require('./usersRouter');
 const categoriesRouter = require('./categoriesRouter');
 
-function routerApi(app){
+async function routerApi(app){
   const router = express.Router();
   app.use('/api/v1', router);
   router.use('/products', productsRouter);
