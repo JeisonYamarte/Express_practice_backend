@@ -1,4 +1,7 @@
 const express = require('express');
+
+const {createUserSchema, updateUserSchema, getUserSchema} = require('../schemas/usersSchema.js');
+const validatorHandler = require('../middlewares/validatorHandler.js');
 const UsersService = require('../service/usersService.js');
 
 const router = express.Router();
@@ -9,37 +12,62 @@ router.get('/',async (req, res)=>{
   res.json(users);
 });
 
-router.get('/:id', async (req, res)=>{
-  const { id } = req.params;
-  const user = await service.findOne(id);
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).json({
-      message: 'User not found'
+router.get('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next)=>{
+    try {
+      const { id } = req.params;
+      const user = await service.findOne(id);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post('/',
+  validatorHandler(createUserSchema, 'body'),
+  async (req, res)=>{
+    const body = req.body;
+    const newUser = await service.create(body);
+    res.status(201).json({
+      message: 'created',
+      data: newUser,
     });
   }
-});
+);
 
-router.post('/', async (req, res)=>{
-  const body = req.body;
-  const newUser = await service.create(body);
-  res.status(201).json(newUser);
-});
+router.put('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(updateUserSchema, 'body'),
+  async (req, res, next)=>{
+    const { id } = req.params;
+    const body = req.body;
+    try{
+      const user = await service.update(id, body);
+      res.json({
+        message: 'updated',
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-router.put('/:id', async (req, res)=>{
-  const { id } = req.params;
-  const body = req.body;
-  const user = await service.update({id, ...body});
-  res.json(user);
-});
-
-router.delete('/:id', async (req, res)=>{
-  const { id } = req.params;
-  const user = await service.delete(id);
-  res.status(204).json({
-    message: 'User deleted'
-  });
-});
+router.delete('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next)=>{
+    const { id } = req.params;
+    try{
+      const user = await service.delete(id);
+      res.status(204).json({
+        message: 'User deleted'
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
