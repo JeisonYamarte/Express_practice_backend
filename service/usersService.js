@@ -1,10 +1,16 @@
 const {faker, da} = require('@faker-js/faker');
 const boom = require('@hapi/boom');
 
+const pool = require('../libs/postgresPool');
+
 class UsersService{
   constructor(){
     this.users = [];
     this.generate();
+    this.pool = pool;
+    this.pool.on('error', (err) => {
+      console.error('Unexpected error on idle client', err);
+    });
   }
 
   async generate(){
@@ -30,7 +36,9 @@ class UsersService{
 
 
   async find(){
-    return this.users;
+    const query ='SELECT * FROM tasks';
+    const respone = await this.pool.query(query);
+    return respone.rows;
   }
 
   async findOne(id){
