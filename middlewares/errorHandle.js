@@ -1,4 +1,4 @@
-const { el } = require("@faker-js/faker");
+
 
 function logErrors (err, req, res, next) {
   console.log('logErrors');

@@ -4,19 +4,19 @@ services:
     image: postgres:13
     container_name: db
     environment:
-      - POSTGRES_DB=my_store
-      - POSTGRES_USER=nito
-      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - 5432:5432
+      - "${DB_PORT}:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@mail.com
-      - PGADMIN_DEFAULT_PASSWORD=admin123
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - 5050:80
     volumes:
