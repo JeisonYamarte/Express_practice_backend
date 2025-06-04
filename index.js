@@ -4,7 +4,8 @@ const cors = require('cors');
 
 
 
-const {logErrors, clientErrorHandler, boomErrorHandler} = require('./middlewares/errorHandle')
+const {logErrors, clientErrorHandler, boomErrorHandler, sequelizeErrorHandler} = require('./middlewares/errorHandle');
+const sequelize = require('./libs/sequelize');
 
 const app = express();
 const PORT = 3000;
@@ -40,8 +41,10 @@ app.get('/new_ruta', (req, res)=>{
 routerApi(app);
 
 app.use(logErrors);
+app.use(sequelizeErrorHandler);
 app.use(boomErrorHandler);
 app.use(clientErrorHandler);
+
 
 
 app.listen(PORT, () => {

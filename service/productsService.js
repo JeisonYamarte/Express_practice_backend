@@ -37,9 +37,9 @@ class categoriesService{
   }
 
   async find(){
-    const query = 'SELECT * FROM tasks';
-    const [data] = await sequelize.query(query);
-    return data;
+    //const query = 'SELECT * FROM tasks';
+    //const [data] = await sequelize.query(query);
+    return "find";
   }
 
   async findOne(id){
