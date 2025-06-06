@@ -23,6 +23,14 @@ const UserSchema = {
     type: DataTypes.STRING,
     unique: true,
   },
+  phone: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    validate: {
+      is: /^\d{10}$/,
+      len: [10, 15], // Validates that the phone number length is between 10 and 15 characters
+    }
+  },
   isActive: {
     allowNull: false,
     type: DataTypes.BOOLEAN,
