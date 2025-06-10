@@ -9,27 +9,22 @@ const UserSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  username: {
+  email: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true,
+    unique: true, // Ensures that each email is unique
+    validate: {
+      isEmail: true, // Validates that the email format is correct
+    },
   },
   password: {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  email: {
+  role: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true,
-  },
-  phone: {
-    allowNull: false,
-    type: DataTypes.STRING,
-    validate: {
-      is: /^\d{10}$/,
-      len: [10, 15], // Validates that the phone number length is between 10 and 15 characters
-    }
+    defaultValue: 'user',
   },
   isActive: {
     allowNull: false,

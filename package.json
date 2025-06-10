@@ -6,9 +6,9 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "lint": "eslint .",
-    "migration:generate": "sequelize migration:generate --name",
-    "migration:run": "sequelize db:migrate",
-    "migration:revert": "sequelize db:migrate:undo"
+    "migrations:generate": "sequelize migration:generate --name",
+    "migrations:run": "sequelize db:migrate",
+    "migrations:revert": "sequelize db:migrate:undo"
   },
   "keywords": [],
   "author": "",

@@ -1,37 +1,36 @@
-
 const boom = require('@hapi/boom');
 
 const {models} = require('../libs/sequelize');
 
-class UsersService{
+class CustomerService{
   constructor(){
   }
 
 
   async create(data){
-    const newUser= await models.User.create(data);
+    const newCustomer= await models.Customer.create(data);
 
-    return newUser;
+    return newCustomer;
   }
 
 
   async find(){;
-    const respone = await models.User.findAll();
+    const respone = await models.Customer.findAll();
     return respone;
   }
 
   async findOne(id){
-    const user = await models.User.findByPk(id);
-    if (!user) {
+    const customer = await models.Customer.findByPk(id);
+    if (!customer) {
       throw boom.notFound('User not found');
     }
-    return user;
+    return customer;
   }
 
 
   async update(id, data){
-    const user = await this.findOne(id);
-    const respone = await user.update(data);
+    const customer = await this.findOne(id);
+    const respone = await customer.update(data);
 
     //if (index === -1) {
     //  throw boom.notFound('User not found');
@@ -47,8 +46,8 @@ class UsersService{
 
 
   async delete(id){
-    const user = await this.findOne(id);
-    await user.destroy();
+    const customer = await this.findOne(id);
+    await customer.destroy();
     /*const index = this.users.findIndex(item => item.id === id);
     if (index === -1) {
       throw boom.notFound('User not found');
@@ -60,4 +59,4 @@ class UsersService{
 
 }
 
-module.exports = UsersService;
+module.exports = CustomerService;

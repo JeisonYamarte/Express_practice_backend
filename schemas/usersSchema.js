@@ -1,26 +1,24 @@
 const joi = require('joi');
 
 const id = joi.string();
-const username = joi.string().min(3).max(20);
 const email = joi.string().email();
+const role= joi.string().valid('admin', 'user').default('user');
 const password = joi.string().min(8).max(20);
-const phone = joi.string().pattern(/^\d{10}$/); // Example pattern for a 10-digit phone number
 const isActive = joi.boolean();
 
 const createUserSchema = joi.object({
-  username: username.required(),
   email: email.required(),
   password: password.required(),
-  phone: phone.required(),
+  role: role.default('user'),
   isActive: isActive.default(true),
 });
 
 const updateUserSchema = joi.object({
-  username: username,
   email: email,
+  role: role,
   password: password,
   isActive: isActive,
-}).or('name', 'email', 'password', 'phone');
+}).or('email', 'role', 'password', 'phone');
 
 const getUserSchema = joi.object({
   id: id.required(),
