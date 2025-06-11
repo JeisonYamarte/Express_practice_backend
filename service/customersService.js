@@ -8,14 +8,18 @@ class CustomerService{
 
 
   async create(data){
-    const newCustomer= await models.Customer.create(data);
+    const newCustomer= await models.Customer.create(data,{
+      include: ['user'] // Include associated user data
+    });
 
     return newCustomer;
   }
 
 
   async find(){;
-    const respone = await models.Customer.findAll();
+    const respone = await models.Customer.findAll({
+      include: ['user'] // Include associated user data
+    });
     return respone;
   }
 
