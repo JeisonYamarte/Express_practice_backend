@@ -15,10 +15,6 @@ router.get('/', async (req, res)=>{
 });
 
 
-router.get('/filter', async (req, res)=>{
-  res.send('Soy un filter');
-});
-
 router.get('/:id',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next)=>{

@@ -7,10 +7,7 @@ const name = joi.string().min(3).max(50);
 const lastName = joi.string().min(3).max(50).allow(null, ''); // Optional field for last name
 const phone = joi.string();
 const address = joi.string().max(100).allow(null, ''); // Optional field for customer address
-const email = joi.string().email().allow(null, ''); // Optional field for customer email
-const password = joi.string().min(8).max(20).allow(null, ''); // Optional field for customer password
 const createdAt = joi.date().default(Date.now);
-const userId = joi.number().integer(); // Assuming userId is required for customer creation
 
 const createCustomerSchema = joi.object({
   name: name.required(),

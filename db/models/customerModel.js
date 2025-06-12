@@ -1,5 +1,5 @@
 
-const { fi } = require('@faker-js/faker');
+
 const {Model, DataTypes, Sequelize} = require('sequelize');
 
 const {USER_TABLE} = require('./userModel'); // Import User model for association
