@@ -40,9 +40,7 @@ class categoriesService{
 
   async update(id, changes){
     const product = this.findOne(id);
-    if (product === -1) {
-      throw boom.notFound('Product not found');
-    }
+
     const respone = await product.update(changes);
 
     return respone;
@@ -51,9 +49,7 @@ class categoriesService{
 
   async delete(id){
     const product = await this.findOne(id);
-    if (product === -1) {
-      throw boom.notFound('Product not found');
-    }
+
     await product.destroy();
 
     return { id };
