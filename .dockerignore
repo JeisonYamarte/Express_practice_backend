@@ -1,0 +1,13 @@
+# Excluye dependencias locales (se instalan en build)
+node_modules
+
+# Tu volumen local de MySQL
+mysql_data/
+postgres_data/
+
+# Archivos del sistema y de Git
+.git
+.gitignore
+.DS_Store
+*.log
+
