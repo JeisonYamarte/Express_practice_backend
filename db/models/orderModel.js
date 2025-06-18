@@ -31,7 +31,7 @@ const OrderSchema = {
     type: DataTypes.DATE,
     defaultValue: Sequelize.NOW,
   },
-  total:{
+  /*total:{
     type: DataTypes.VIRTUAL,
     get() {
       if (this.items && this.items.length > 0) {
@@ -41,7 +41,7 @@ const OrderSchema = {
       }
       return 0;
     },
-  }
+  }*/
 
 };
 

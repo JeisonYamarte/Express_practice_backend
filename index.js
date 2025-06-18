@@ -1,14 +1,15 @@
 const express = require('express');
 const routerApi = require('./routes/indexRouter');
 const cors = require('cors');
+const {config} = require('./config/config');
 
 
 
 const {logErrors, clientErrorHandler, boomErrorHandler, sequelizeErrorHandler} = require('./middlewares/errorHandle');
-const sequelize = require('./libs/sequelize');
+
 
 const app = express();
-const PORT = 3000;
+
 
 
 app.use(express.json());
@@ -38,7 +39,7 @@ app.use(clientErrorHandler);
 
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Server is running on http://localhost:${config.port}`);
 });
 
