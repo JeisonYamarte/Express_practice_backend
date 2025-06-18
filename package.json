@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "migrations:generate": "sequelize migration:generate --name",
     "migrations:run": "npx sequelize db:migrate",
-    "migrations:revert": "sequelize db:migrate:undo"
+    "migrations:revert": "sequelize db:migrate:undo",
+    "start:prod": "npx sequelize db:migrate && npm start"
   },
   "keywords": [],
   "author": "",
