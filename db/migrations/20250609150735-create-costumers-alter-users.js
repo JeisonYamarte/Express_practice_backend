@@ -13,7 +13,12 @@ module.exports = {
     if (table.phone) {
       await queryInterface.removeColumn(USER_TABLE, 'phone');
     }
+<<<<<<< HEAD
 
+=======
+    
+    await queryInterface.addColumn(USER_TABLE, 'role', UserSchema.role);
+>>>>>>> 6f7cede2b256fc6ea9fa4c8f12440df0710362c7
 
   },
 
