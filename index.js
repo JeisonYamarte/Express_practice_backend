@@ -37,7 +37,8 @@ app.use(sequelizeErrorHandler);
 app.use(boomErrorHandler);
 app.use(clientErrorHandler);
 
-
+console.log(`Environment: ${config.env}`);
+console.log(`Port: ${config.port}`);
 
 app.listen(config.port, () => {
   console.log(`Server is running on http://localhost:${config.port}`);
