@@ -40,7 +40,7 @@ app.use(clientErrorHandler);
 console.log(`Environment: ${config.env}`);
 console.log(`Port: ${config.port}`);
 
-app.listen(process.env.PORT, () => {
+app.listen(5432, () => {
   console.log(`Server is running on http://localhost:${config.port}`);
 });
 
