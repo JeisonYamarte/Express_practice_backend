@@ -11,4 +11,8 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npm run migrations:run && npm start"]
+COPY start.sh .
+
+RUN chmod +x start.sh
+
+CMD ["./start.sh"]
