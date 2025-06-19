@@ -9,6 +9,7 @@ const {logErrors, clientErrorHandler, boomErrorHandler, sequelizeErrorHandler} =
 
 
 const app = express();
+const port = process.env.PORT;
 
 
 
@@ -40,7 +41,7 @@ app.use(clientErrorHandler);
 console.log(`Environment: ${config.env}`);
 console.log(`Port: ${config.port}`);
 
-app.listen(process.env.PORT, () => {
+app.listen(port, () => {
   console.log(`Server is running on http://localhost:${config.port}`);
 });
 
