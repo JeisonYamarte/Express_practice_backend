@@ -34,9 +34,9 @@ app.get('/new_ruta', (req, res)=>{
 routerApi(app);
 
 app.use(logErrors);
-app.use(sequelizeErrorHandler);
 app.use(boomErrorHandler);
 app.use(clientErrorHandler);
+app.use(sequelizeErrorHandler);
 
 console.log(`Environment: ${config.env}`);
 console.log(`Port: ${config.port}`);
