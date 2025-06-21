@@ -2,6 +2,7 @@ const express = require('express');
 const routerApi = require('./routes/indexRouter');
 const cors = require('cors');
 const {config} = require('./config/config');
+const {checkApiKey} = require('./middlewares/authHandler');
 
 
 
@@ -26,7 +27,7 @@ app.get('/', (req, res)=>{
   res.send('MY FIRST EXPRESS APP');
 });
 
-app.get('/new_ruta', (req, res)=>{
+app.get('/new_ruta',checkApiKey, (req, res)=>{
   res.send('Ruta Page');
 }
 );

@@ -2,14 +2,14 @@ const joi = require('joi');
 
 const id = joi.string();
 const email = joi.string().email();
-const role= joi.string().valid('admin', 'user').default('user');
+const role= joi.string().valid('admin', 'user','customer').default('customer');
 const password = joi.string().min(8).max(20);
 const isActive = joi.boolean();
 
 const createUserSchema = joi.object({
   email: email.required(),
   password: password.required(),
-  role: role.default('user'),
+  role: role.default('customer'),
   isActive: isActive.default(true),
 });
 

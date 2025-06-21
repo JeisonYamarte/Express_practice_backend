@@ -9,13 +9,17 @@
     "migrations:generate": "sequelize migration:generate --name",
     "migrations:run": "npx sequelize db:migrate",
     "migrations:revert": "sequelize db:migrate:undo",
-    "start:prod": "npx sequelize db:migrate && npm start"
+    "start:prod": "npx sequelize db:migrate && npm start",
+    "seeders:generate": "sequelize seed:generate --name",
+    "seeders:run": "npx sequelize db:seed:all",
+    "seeders:revert": "sequelize db:seed:undo:all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@faker-js/faker": "^9.8.0",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.4.0",
@@ -25,6 +29,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
