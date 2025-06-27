@@ -1,5 +1,6 @@
-
+const bcrypt = require('bcrypt');
 const {Model, DataTypes, Sequelize} = require('sequelize');
+const { Hooks } = require('sequelize/lib/hooks');
 
 const USER_TABLE = 'users';
 const UserSchema = {
@@ -55,6 +56,13 @@ class User extends Model {
       tableName: USER_TABLE,
       modelName: 'User',
       timestamps: false,
+      hooks: {
+        beforeCreate: async (user, options) => {
+          const password = bcrypt.hash(user.password, 10);
+          user.password = await password; // Hash the password before saving
+
+        },
+      },
     };
   }
 }

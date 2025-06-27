@@ -18,6 +18,7 @@ app.use(express.json());
 
 
 app.use(cors());
+require('./utils/auth'); // Initialize passport strategies
 
 app.get('/api/test', (req, res) => {
   res.json({ message: 'CORS funciona correctamente 🎉' });

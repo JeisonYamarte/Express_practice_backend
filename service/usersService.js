@@ -11,11 +11,8 @@ class UsersService{
 
 
   async create(data){
-    const hash = await bcrypt.hash(data.password, 10);
-    const newUser= await models.User.create({
-      ...data,
-      password: hash
-    });
+    //const hash = await bcrypt.hash(data.password, 10);
+    const newUser= await models.User.create(data);
 
     delete newUser.dataValues.password; // Remove password from response
 
@@ -26,6 +23,13 @@ class UsersService{
   async find(){;
     const respone = await models.User.findAll({
       include: ['customer'] // Include associated customer data
+    });
+    return respone;
+  }
+
+   async findByEmail(email){;
+    const respone = await models.User.findOne({
+      where: {email}
     });
     return respone;
   }
@@ -43,15 +47,7 @@ class UsersService{
     const user = await this.findOne(id);
     const respone = await user.update(data);
 
-    //if (index === -1) {
-    //  throw boom.notFound('User not found');
-    //}
-    /*const user = this.users[index];
-    const userUpdated = {
-      ...user,
-      ...data,
-    };
-    this.users[index] = userUpdated;*/
+
     return respone;
   }
 
@@ -59,11 +55,7 @@ class UsersService{
   async delete(id){
     const user = await this.findOne(id);
     await user.destroy();
-    /*const index = this.users.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('User not found');
-    }
-    this.users.splice(index, 1);*/
+
     return {id};
 
   }

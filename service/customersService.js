@@ -10,15 +10,9 @@ class CustomerService{
 
 
   async create(data){
-    const hash = await bcrypt.hash(data.user.password, 10);
-    const newData = {
-      ...data,
-      user: {
-        ...data.user,
-        password: hash // Hash the password before saving
-      }
-    };
-    const newCustomer= await models.Customer.create(newData,{
+
+
+    const newCustomer= await models.Customer.create(data,{
       include: ['user'] // Include associated user data
     });
 
@@ -30,6 +24,14 @@ class CustomerService{
 
   async find(){;
     const respone = await models.Customer.findAll({
+      include: ['user'] // Include associated user data
+    });
+    return respone;
+  }
+
+  async findByUserName(name){;
+    const respone = await models.Customer.findOne({
+      where:{name},
       include: ['user'] // Include associated user data
     });
     return respone;
