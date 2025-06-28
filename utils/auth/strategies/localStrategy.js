@@ -8,9 +8,7 @@ const CustomersService = require('../../../service/customersService');
 const service = new UsersService();
 const customerService = new CustomersService();
 
-const options = async(email) => {
 
-}
 
 const LocalStrategy = new Strategy({
   usernameField: 'email',

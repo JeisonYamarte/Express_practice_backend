@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 
 
 const ProductsService = require('../service/productsService.js');
@@ -37,17 +38,23 @@ router.get('/:id',
 
 
 router.post('/',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(createProductSchema, 'body'),
-  async (req, res)=>{
+  async (req, res, next)=>{
     const body = req.body;
-    const newProduct = await service.create(body);
-    res.status(201).json({
-      message: 'created',
-      data: newProduct,
-    });
+    try {
+      const newProduct = await service.create(body);
+      res.status(201).json({
+        message: 'created',
+        data: newProduct,
+      });
+    } catch (error) {
+      next(error);
+    }
 });
 
 router.put('/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
   async (req, res, next)=>{
@@ -66,14 +73,19 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(getProductSchema, 'params'),
-  async (req, res)=>{
+  async (req, res, next)=>{
     const { id } = req.params;
-    const product = await service.delete(id);
-    res.json({
-      message: 'deleted',
-      data: product,
-    });
+    try{
+      const product = await service.delete(id);
+      res.json({
+        message: 'deleted',
+        data: product,
+      });
+    } catch (error) {
+      next(error);
+    }
 
   }
 );

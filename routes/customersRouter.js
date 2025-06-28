@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 
 const {getCustomerSchema, createCustomerSchema, updateCustomerSchema} = require('../schemas/customersSchema');
 const validatorHandler = require('../middlewares/validatorHandler');
@@ -26,18 +27,25 @@ router.get('/:id',
 );
 
 router.post('/',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(createCustomerSchema, 'body'),
-  async (req, res)=>{
+  async (req, res, next)=>{
     const body = req.body;
-    const newCustomer = await service.create(body);
-    res.status(201).json({
-      message: 'created',
-      data: newCustomer,
-    });
+    try {
+      const newCustomer = await service.create(body);
+      res.status(201).json({
+        message: 'created',
+        data: newCustomer,
+      }
+    );
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
 router.put('/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(getCustomerSchema, 'params'),
   validatorHandler(updateCustomerSchema, 'body'),
   async (req, res, next)=>{
@@ -56,6 +64,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(getCustomerSchema, 'params'),
   async (req, res, next)=>{
     const { id } = req.params;
