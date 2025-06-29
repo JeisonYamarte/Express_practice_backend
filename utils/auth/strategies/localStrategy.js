@@ -33,8 +33,11 @@ const LocalStrategy = new Strategy({
         return done(boom.unauthorized('Invalid password'), false);
       }
 
-      delete user.dataValues.password; // Remove password from response
-      delete user.dataValues.user.dataValues.password; // Remove password from response if it's a customer
+      if (!schema.validate(email).error){
+        delete user.dataValues.password;
+      } else {
+        delete user.dataValues.user.dataValues.password;
+      }
       done(null, user);
 
     } catch (error) {

@@ -50,15 +50,7 @@ class CustomerService{
     const customer = await this.findOne(id);
     const respone = await customer.update(data);
 
-    //if (index === -1) {
-    //  throw boom.notFound('User not found');
-    //}
-    /*const user = this.users[index];
-    const userUpdated = {
-      ...user,
-      ...data,
-    };
-    this.users[index] = userUpdated;*/
+
     return respone;
   }
 
@@ -66,11 +58,7 @@ class CustomerService{
   async delete(id){
     const customer = await this.findOne(id);
     await customer.destroy();
-    /*const index = this.users.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('User not found');
-    }
-    this.users.splice(index, 1);*/
+
     return {id};
 
   }

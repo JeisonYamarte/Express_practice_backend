@@ -30,6 +30,7 @@ router.post('/',
   }
 );
 
+// Add an item to an order
 router.post('/add-item',
   passport.authenticate('jwt', { session: false }),
   validatorHandler(addItemSchema, 'body'),
