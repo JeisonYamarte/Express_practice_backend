@@ -27,10 +27,13 @@ class UsersService{
     return respone;
   }
 
-   async findByEmail(email){;
+  async findByEmail(email){;
     const respone = await models.User.findOne({
       where: {email}
     });
+    if (!respone) {
+      throw boom.notFound('User not found');
+    }
     return respone;
   }
 

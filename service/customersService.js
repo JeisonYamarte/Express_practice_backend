@@ -34,7 +34,10 @@ class CustomerService{
       where:{name},
       include: ['user'] // Include associated user data
     });
-    return respone;
+    if (!respone) {
+      throw boom.notFound('User not found');
+    }
+    return respone.dataValues.user;
   }
 
   async findOne(id){

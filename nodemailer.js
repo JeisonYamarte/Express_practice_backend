@@ -23,6 +23,6 @@ const transporter = nodemailer.createTransport({
 
   console.log("Message sent:", info.messageId);
 
-   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 })();
