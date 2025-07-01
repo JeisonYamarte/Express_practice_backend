@@ -52,11 +52,65 @@ class AuthService {
     }
   }
 
-  async sendMail(email){
+  async sendRecoveryPassword(email) {
     const user = await userService.findByEmail(email);
     if(!user) {
       throw boom.notFound('User not found');
     }
+
+    const payload = {
+      sub: user.id
+    }
+    const token = jwt.sign(payload, config.jwtSecret, {
+      expiresIn: '10min', // Token expiration time
+    });
+
+    const link = `http://myfrontend.com/recovery?token=${token}`;
+
+    await userService.update(user.id, {
+      recoveryToken: token,
+    })
+
+    const mail ={
+      from: config.smtpUser, // sender address
+      to: `${user.email}`, // list of receivers
+      subject: "Recuperacion de contraseña", // Subject line
+      html: `<b>Ingresa al link => ${link} </b>`, // HTML body
+    }
+
+    const response = await this.sendMail(mail);
+
+    return response;
+  }
+
+  async changePassword(token, newPassword){
+    try{
+      const payload = jwt.verify(token, config.jwtSecret);
+      console.log(payload);
+
+      const user = await userService.findOne(payload.sub);
+
+      console.log(user);
+
+      if (user.recoveryToken !== token){
+        throw boom.unauthorized('Token invalid')
+      }
+
+      const hash = await bcrypt.hash(newPassword, 10);
+
+      await userService.update(user.id,{
+        recoveryToken: null,
+        password: hash
+      })
+
+      return({message: 'password changed succesfully'})
+
+    } catch (error){
+      throw boom.unauthorized('error');
+    }
+  }
+
+  async sendMail(infoMail){
 
     const transporter = nodemailer.createTransport({
       host: config.smtpHost,
@@ -69,13 +123,7 @@ class AuthService {
     });
 
 
-  await transporter.sendMail({
-    from: config.smtpUser, // sender address
-    to: `${user.email}`, // list of receivers
-    subject: "Funciona nodemailer?", // Subject line
-    text: "Hello otro yo", // plain‑text body
-    html: "<b>Hello world?</b>", // HTML body
-  });
+  await transporter.sendMail(infoMail);
 
   return {
     message: 'Recovery email sent successfully',
