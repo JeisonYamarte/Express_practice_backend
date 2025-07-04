@@ -11,20 +11,32 @@ class CustomerService{
 
   async create(data){
 
+  if (data.user && typeof data.user === 'object' && !Array.isArray(data.user)) {
+    const newUser = await models.User.create(data.user);
+    data.userId = newUser.id;
+    delete data.user; // Eliminamos el objeto user para evitar conflictos
+  } else if (typeof data.user === 'number') {
+    data.userId = data.user;
+    delete data.user;
+  }
 
-    const newCustomer= await models.Customer.create(data,{
-      include: ['user'] // Include associated user data
-    });
+  const newCustomer = await models.Customer.create(data, {
+    include: ['user'] // Incluye los datos asociados del usuario
+  });
 
-    delete newCustomer.dataValues.user.dataValues.password; // Remove password from response
-
+  if (newCustomer.dataValues.user) {
+    delete newCustomer.dataValues.user.dataValues.password; // Elimina la contraseña de la respuesta
+  }
     return newCustomer;
   }
 
 
   async find(){;
     const respone = await models.Customer.findAll({
-      include: ['user'] // Include associated user data
+      include: [{
+        attributes: { exclude: ['password', 'recoveryToken'] }, // Exclude sensitive fields
+        association:'user'
+      }] // Include associated user data
     });
     return respone;
   }
@@ -46,6 +58,14 @@ class CustomerService{
       throw boom.notFound('User not found');
     }
     return customer;
+  }
+
+  async findUserId(id, userId){
+    const customer = await this.findOne(id);
+    if (customer.userId !== userId) {
+      throw boom.notFound('Customer not found for this user or user not authorized');
+    }
+    return true;
   }
 
 

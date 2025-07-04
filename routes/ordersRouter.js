@@ -4,6 +4,7 @@ const passport = require('passport');
 const OrdersService = require('../service/orderService');
 
 const validatorHandler = require('../middlewares/validatorHandler');
+const {checkRoles} = require('../middlewares/authHandler')
 
 const {
   getOrderSchema,
@@ -21,8 +22,10 @@ router.post('/',
   validatorHandler(createOrderSchema, 'body'),
   async (req, res, next) => {
     try {
+      const userId = req.user.sub;
       const body = req.body;
-      const newOrder = await service.create(body);
+      const data = await service.packageData(userId, body)
+      const newOrder = await service.create(data);
       res.status(201).json(newOrder);
     } catch (error) {
       next(error);
@@ -47,7 +50,10 @@ router.post('/add-item',
 
 
 // Get all orders
-router.get('/', async (req, res, next) => {
+router.get('/',
+  passport.authenticate('jwt',{session:false}),
+  checkRoles('admin'),
+  async (req, res, next) => {
   try {
     const orders = await service.find();
     res.json(orders);
@@ -59,12 +65,18 @@ router.get('/', async (req, res, next) => {
 
 
 // Get a specific order by ID
-router.get(
-  '/:id',
+router.get('/:id',
+  passport.authenticate('jwt',{session:false}),
   validatorHandler(getOrderSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
+      const userId = req.user.sub;
+      // Verify if the user is authorized to access this order
+      const verify = await service.verifyOrder(id, req.user.sub);
+      if (!verify) {
+        return res.status(403).json({ message: 'You are not authorized to access this order' });
+      }
       const order = await service.findOne(id);
       res.json(order);
     } catch (error) {
@@ -82,6 +94,10 @@ router.put('/:id',
     try {
       const { id } = req.params;
       const body = req.body;
+      const verify = await service.verifyOrder(id, req.user.sub);
+      if (!verify) {
+        return res.status(403).json({ message: 'You are not authorized to access this order' });
+      }
       const updatedOrder = await service.update(id, body);
       res.json(updatedOrder);
     } catch (error) {
@@ -93,12 +109,17 @@ router.put('/:id',
 // Delete an order by ID
 router.delete('/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validatorHandler(getOrderSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
+      const verify = await service.verifyOrder(id, req.user.sub);
+      if (!verify) {
+        return res.status(403).json({ message: 'You are not authorized to access this order' });
+      }
       await service.delete(id);
-      res.status(204).json();
+      res.status(204).json('deleted');
     } catch (error) {
       next(error);
     }

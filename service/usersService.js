@@ -15,6 +15,7 @@ class UsersService{
     const newUser= await models.User.create(data);
 
     delete newUser.dataValues.password; // Remove password from response
+    delete newUser.dataValues.recoveryToken;
 
     return newUser;
   }
@@ -29,7 +30,9 @@ class UsersService{
 
   async findByEmail(email){;
     const respone = await models.User.findOne({
-      where: {email}
+      where: {
+        email: email.toLowerCase()
+      }
     });
     if (!respone) {
       throw boom.notFound('User not found');
@@ -38,7 +41,9 @@ class UsersService{
   }
 
   async findOne(id){
-    const user = await models.User.findByPk(id);
+    const user = await models.User.findByPk(id,{
+      include: ['customer']
+    });
     if (!user) {
       throw boom.notFound('User not found');
     }

@@ -2,6 +2,10 @@ const boom = require('@hapi/boom');
 
 const { models } = require('../libs/sequelize');
 
+const UsersService = require('../service/usersService')
+
+const service = new UsersService;
+
 class OrderService {
   constructor() {
     // Initialize any properties or dependencies if needed
@@ -18,6 +22,19 @@ class OrderService {
       throw boom.badRequest('Item could not be added to the order');
     }
     return newItem;
+  }
+
+  //packege data with jwt and body
+  async packageData(id, body){
+    const user = await service.findOne(id);
+
+    if(user.dataValues.customer === null){
+      throw boom.notFound('customer no associate');
+    }
+
+    body.customerId = user.dataValues.customer.dataValues.id;
+
+    return body;
   }
 
   async find() {
@@ -38,7 +55,7 @@ class OrderService {
     const orders = await models.Order.findAll({
       where: {
         '$customer.user.id$': userId
-       },
+      },
       include: [
         {
           association: 'customer',
@@ -57,7 +74,10 @@ class OrderService {
       include: [
         {
         association: 'customer',
-        include: ['user']
+        include: [{
+          association: 'user',
+          attributes: { exclude: ['password', 'recoveryToken'] }
+        }]
       },
       'items'
     ],
@@ -78,6 +98,16 @@ class OrderService {
     const order = await this.findOne(id);
     await order.destroy();
     return { id };
+  }
+
+  async verifyOrder(orderId, userId) {
+    const order = await this.findOne(orderId);
+    if (order.customer.user.id !== userId) {
+      throw boom.unauthorized('You are not authorized to access this order');
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 

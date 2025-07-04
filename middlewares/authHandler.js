@@ -23,8 +23,8 @@ function checkAdminRole(req, res, next) {
 
 function checkRoles(...roles) {
   return (req, res, next) => {
-    const user = req.user;
 
+    const user = req.user;
     if (roles.includes(user.role)) {
       next(); // User has one of the required roles, proceed to the next middleware or route handler
     } else {

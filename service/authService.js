@@ -26,7 +26,7 @@ class AuthService {
     const isMatch = await bcrypt.compare(password, user.password)
 
     if(!isMatch) {
-      return done(boom.unauthorized('Invalid password'), false);
+      return (boom.unauthorized('Invalid password'), false);
     }
 
     delete user.dataValues.password;
@@ -45,6 +45,8 @@ class AuthService {
     if(!token) {
       throw boom.unauthorized('Invalid token');
     }
+
+    delete user.dataValues.recoveryToken;
 
     return {
       user,

@@ -14,6 +14,9 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
     unique: true, // Ensures that each email is unique
+    set(value) {
+      this.setDataValue('email', value.toLowerCase());
+    },
     validate: {
       isEmail: true, // Validates that the email format is correct
     },
